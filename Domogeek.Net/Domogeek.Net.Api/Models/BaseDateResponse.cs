@@ -4,9 +4,9 @@ namespace Domogeek.Net.Api.Models
 {
     public abstract class BaseDateResponse
     {
-        public BaseDateResponse(DateTimeOffset date)
+        public BaseDateResponse(DateTimeOffset date, bool dayOnly = true)
         {
-            Date = date.Date;
+            Date = dayOnly ? date.Date : date;
         }
 
         public DateTimeOffset Date { get; set; }
