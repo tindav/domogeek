@@ -9,6 +9,7 @@ namespace Domogeek.Net.Api.Models
         {
             Country = country;
         }
+
         public bool IsWeekEnd
         {
             get
@@ -22,6 +23,6 @@ namespace Domogeek.Net.Api.Models
             }
         }
 
-        public CountryEnum Country { get; }
+        private CountryEnum Country { get; }
     }
 }
