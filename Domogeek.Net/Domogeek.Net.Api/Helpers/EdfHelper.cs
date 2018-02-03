@@ -14,22 +14,27 @@ namespace Domogeek.Net.Api.Helpers
 
         private IMemoryCache Cache { get; }
 
+        private const string CachePrefix = "EdfTempo";
+
+        private string CacheKey(DateTimeOffset date) => $"{CachePrefix}-{date.Date}";
+
         public EdfHelper(IMemoryCache cache)
         {
             Cache = cache;
         }
 
+
         const string tempoUrl = "https://particulier.edf.fr/bin/edf_rc/servlets/ejptemponew?Date_a_remonter={0}&TypeAlerte=TEMPO";
 
         public async Task<TempoEnum> GetTempoAsync(DateTimeOffset date)
         {
-            if (Cache.TryGetValue(date.Date, out TempoEnum tempoValue))
+            if (Cache.TryGetValue(CacheKey(date), out TempoEnum tempoValue))
             {
                 return tempoValue;
             }
 
             var tempo = await GetTempoFromEdfAsync(date);
-            Cache.Set(date.Date, tempo.JourJ.Tempo, TimeSpan.FromDays(1));
+            Cache.Set(CacheKey(date), tempo.JourJ.Tempo, TimeSpan.FromDays(1));
             return tempo.JourJ.Tempo;
         }
 
