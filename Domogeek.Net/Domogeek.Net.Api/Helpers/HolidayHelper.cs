@@ -9,31 +9,31 @@ namespace Domogeek.Net.Api.Helpers
     public static class HolidayHelper
     {
 
-        public static Dictionary<DateTimeOffset, Holiday> Holidays(int year, CountryEnum country)
+        public static List<Holiday> Holidays(int year, CountryEnum country)
         {
 
-            var holidays = new Dictionary<DateTimeOffset, Holiday>();
+            var holidays = new List<Holiday>();
 
             var ed = EasterDate(year);
 
             switch (country)
             {
                 case CountryEnum.fr:
-                    holidays.Add(new DateTime(year, 1, 1), new Holiday("Jour de l'an"));
-                    holidays.Add(ed.AddDays(-2), new Holiday("Vendredi Saint", "Alsace-Moselle"));
-                    holidays.Add(ed, new Holiday("Dimanche de Pâques"));
-                    holidays.Add(ed.AddDays(1), new Holiday("Lundi de Pâques"));
-                    holidays.Add(new DateTime(year, 5, 1), new Holiday("Fête du travail"));
-                    holidays.Add(new DateTime(year, 5, 8), new Holiday("Victoire des alliés 1945"));
-                    holidays.Add(ed.AddDays(39), new Holiday("Jeudi de l'ascension"));
-                    holidays.Add(ed.AddDays(49), new Holiday("Dimanche de Pentecôte"));
-                    holidays.Add(ed.AddDays(50), new Holiday("Lundi de Pentecôte"));
-                    holidays.Add(new DateTime(year, 7, 14), new Holiday("Fête Nationale"));
-                    holidays.Add(new DateTime(year, 8, 15), new Holiday("Assomption"));
-                    holidays.Add(new DateTime(year, 11, 1), new Holiday("Toussaint"));
-                    holidays.Add(new DateTime(year, 11, 11), new Holiday("Armistice 1918"));
-                    holidays.Add(new DateTime(year, 12, 25), new Holiday("Jour de Noël"));
-                    holidays.Add(new DateTime(year, 12, 26), new Holiday("Saint Etienne", "Alsace"));
+                    holidays.Add(new Holiday(new DateTime(year, 1, 1), "Jour de l'an"));
+                    holidays.Add(new Holiday(ed.AddDays(-2), "Vendredi Saint", "Alsace-Moselle"));
+                    holidays.Add(new Holiday(ed, "Dimanche de Pâques"));
+                    holidays.Add(new Holiday(ed.AddDays(1), "Lundi de Pâques"));
+                    holidays.Add(new Holiday(new DateTime(year, 5, 1), "Fête du travail"));
+                    holidays.Add(new Holiday(new DateTime(year, 5, 8), "Victoire des alliés 1945"));
+                    holidays.Add(new Holiday(ed.AddDays(39), "Jeudi de l'ascension"));
+                    holidays.Add(new Holiday(ed.AddDays(49), "Dimanche de Pentecôte"));
+                    holidays.Add(new Holiday(ed.AddDays(50), "Lundi de Pentecôte"));
+                    holidays.Add(new Holiday(new DateTime(year, 7, 14), "Fête Nationale"));
+                    holidays.Add(new Holiday(new DateTime(year, 8, 15), "Assomption"));
+                    holidays.Add(new Holiday(new DateTime(year, 11, 1), "Toussaint"));
+                    holidays.Add(new Holiday(new DateTime(year, 11, 11), "Armistice 1918"));
+                    holidays.Add(new Holiday(new DateTime(year, 12, 25), "Jour de Noël"));
+                    holidays.Add(new Holiday(new DateTime(year, 12, 26), "Saint Etienne", "Alsace"));
                     break;
             }
 
@@ -65,8 +65,7 @@ namespace Domogeek.Net.Api.Helpers
 
         public static Holiday GetHoliday(DateTimeOffset date, CountryEnum country)
         {
-            var holidays = Holidays(date.Year, country);
-            return holidays.ContainsKey(date) ? holidays[date] : null;
+            return Holidays(date.Year, country).FirstOrDefault(h => h.Date.Equals(date));
         }
     }
 }

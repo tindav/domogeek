@@ -46,7 +46,7 @@ namespace Domogeek.Net.Api.Controllers
         private HolidayResponse Holiday(DateTimeOffset date, CountryEnum country)
         {
             var holiday = HolidayHelper.GetHoliday(date, country);
-            return new HolidayResponse(holiday);
+            return new HolidayResponse(date, holiday);
         }
     }
 }

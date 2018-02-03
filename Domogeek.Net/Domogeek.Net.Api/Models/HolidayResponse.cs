@@ -1,28 +1,17 @@
-﻿namespace Domogeek.Net.Api.Models
+﻿using System;
+
+namespace Domogeek.Net.Api.Models
 {
-    public class Holiday
-    {
-        public Holiday() { }
-
-        public Holiday(string holidayName, string specificHoliday = null)
-        {
-            HolidayName = holidayName;
-            SpecificHoliday = specificHoliday;
-        }
-
-        public string HolidayName { get; set; }
-        public string SpecificHoliday { get; set; }
-    }
-
     public class HolidayResponse : Holiday
     {
-        public HolidayResponse(Holiday holiday)
+        public HolidayResponse(DateTimeOffset date) : base(date)
         {
-            IsHoliday = holiday != null;
-            HolidayName = holiday?.HolidayName;
-            SpecificHoliday = holiday?.SpecificHoliday;
         }
 
-        public bool IsHoliday { get; set; }
+        public HolidayResponse(DateTimeOffset date, Holiday holiday) : base(date, holiday?.HolidayName, holiday?.SpecificHoliday)
+        {
+        }
+
+        public bool IsHoliday => !string.IsNullOrWhiteSpace(HolidayName);
     }
 }

@@ -24,7 +24,10 @@ namespace Domogeek.Net.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(s =>
+            {
+                s.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+            });
 
             services.AddSwaggerGen(c =>
             {
@@ -52,7 +55,7 @@ namespace Domogeek.Net.Api
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Domogeek.Net v1");
-                
+
             });
         }
     }
