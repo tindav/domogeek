@@ -17,7 +17,7 @@ namespace Domogeek.Net.Api.Controllers
         }
 
         [HttpGet("~/api/tempoedf/{value}")]
-        [SwaggerResponse(200, typeof(Weekend))]
+        [SwaggerResponse(200, typeof(EdfTempoResponse))]
         [SwaggerResponse(400)]
         public async Task<IActionResult> Get([FromRoute] string value, CountryEnum? country)
         {
@@ -27,7 +27,7 @@ namespace Domogeek.Net.Api.Controllers
             DateTimeOffset? date = GetDateFromInput(value);
 
             if (date.HasValue)
-                return Ok((await _edfHelper.GetTempoAsync(date.Value)).ToString());
+                return Ok(new EdfTempoResponse(date.Value, await _edfHelper.GetTempoAsync(date.Value)));
 
             return BadRequest();
         }
