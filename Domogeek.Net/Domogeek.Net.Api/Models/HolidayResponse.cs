@@ -1,13 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Domogeek.Net.Api.Models
+﻿namespace Domogeek.Net.Api.Models
 {
-    public class HolidayResponse
+    public class Holiday
     {
-        public bool IsHoliday { get; set; }
+        public Holiday() { }
+
+        public Holiday(string holidayName, string specificHoliday = null)
+        {
+            HolidayName = holidayName;
+            SpecificHoliday = specificHoliday;
+        }
+
         public string HolidayName { get; set; }
+        public string SpecificHoliday { get; set; }
+    }
+
+    public class HolidayResponse : Holiday
+    {
+        public HolidayResponse(Holiday holiday)
+        {
+            IsHoliday = holiday != null;
+            HolidayName = holiday?.HolidayName;
+            SpecificHoliday = holiday?.SpecificHoliday;
+        }
+
+        public bool IsHoliday { get; set; }
     }
 }

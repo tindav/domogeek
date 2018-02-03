@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Domogeek.Net.Api.Helpers;
 using Domogeek.Net.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -10,10 +11,13 @@ namespace Domogeek.Net.Api.Controllers
     {
         // GET api/values
         [HttpGet("~/api/holiday/{value}")]
-        [SwaggerResponse(200, typeof(string))]
+        [SwaggerResponse(200, typeof(HolidayResponse))]
         [SwaggerResponse(400)]
-        public IActionResult Get([FromRoute] string value)
+        public IActionResult Get([FromRoute] string value, CountryEnum? country)
         {
+            if (!country.HasValue)
+                country = CountryEnum.fr;
+
             if (Enum.TryParse(value, true, out DateEnum enumValue))
             {
                 DateTimeOffset? dateFromEnum = null;
@@ -30,19 +34,19 @@ namespace Domogeek.Net.Api.Controllers
                         break;
                 }
                 if (dateFromEnum.HasValue)
-                    return Ok(Holiday(dateFromEnum.Value));
+                    return Ok(Holiday(dateFromEnum.Value, country.Value));
             }
             if (DateTimeOffset.TryParse(value, out DateTimeOffset date))
             {
-                return Ok(Holiday(date));
+                return Ok(Holiday(date, country.Value));
             }
             return BadRequest();
         }
 
-        private string Holiday(DateTimeOffset date)
+        private HolidayResponse Holiday(DateTimeOffset date, CountryEnum country)
         {
-            return date.ToString("yyyy-MM-dd");
-
+            var holiday = HolidayHelper.GetHoliday(date, country);
+            return new HolidayResponse(holiday);
         }
     }
 }
