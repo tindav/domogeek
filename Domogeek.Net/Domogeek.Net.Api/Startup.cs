@@ -34,6 +34,7 @@ namespace Domogeek.Net.Api
             services.AddMemoryCache();
             services.AddSingleton<EdfHelper>();
             services.AddSingleton<SchoolHolidayHelper>();
+            services.AddSingleton<VigilanceHelper>();
 
             services.AddSwaggerGen(c =>
             {
