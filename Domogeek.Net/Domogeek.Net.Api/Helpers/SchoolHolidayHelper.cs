@@ -1,4 +1,4 @@
-﻿using Domogeek.Net.Api.Controllers;
+﻿using Domogeek.Net.Api.Models;
 using Domogeek.Net.Api.Models.External;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
@@ -24,16 +24,16 @@ namespace Domogeek.Net.Api.Helpers
 
         const string schoolHolidayUrl = "https://data.education.gouv.fr/explore/dataset/fr-en-calendrier-scolaire/download?format=json";
 
-        public async Task<string> GetSchoolHoliday(DateTimeOffset date, SchoolZone zone)
+        public async Task<SchoolHoliday> GetSchoolHoliday(DateTimeOffset date, SchoolZone zone)
         {
             if (Cache.TryGetValue(CacheKey, out SchoolHolidayData[] schoolHolidayData))
             {
-                return schoolHolidayData.FirstOrDefault(h => IsDateInRange(date, h) && IsForZone(zone, h))?.Holidays?.Description;
+                return schoolHolidayData.FirstOrDefault(h => IsDateInRange(date, h) && IsForZone(zone, h))?.Holidays;
             }
 
             var schoolHolidays = await GetSchoolHolidayFromOpenData();
             Cache.Set(CacheKey, schoolHolidays, TimeSpan.FromDays(1));
-            return schoolHolidays.FirstOrDefault(h => IsDateInRange(date, h))?.Holidays?.Description;
+            return schoolHolidays.FirstOrDefault(h => IsDateInRange(date, h))?.Holidays;
         }
 
         private bool IsForZone(SchoolZone zone, SchoolHolidayData h)

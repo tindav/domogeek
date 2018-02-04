@@ -26,7 +26,7 @@ namespace Domogeek.Net.Api.Controllers
             if (date.HasValue)
                 return Ok(new EdfTempoResponse(date.Value, await _edfHelper.GetTempoAsync(date.Value)));
 
-            return BadRequest();
+            return BadRequest("Invalid date, accepted values: now|tomorrow|yesterday|date(YYYY-MM-DD)");
         }
     }
 }

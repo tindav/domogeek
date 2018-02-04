@@ -2,6 +2,7 @@
 {
     public enum CountryEnum
     {
+        unknown = 0,
         fr = 250
     }
 }

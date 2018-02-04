@@ -21,12 +21,15 @@ namespace Domogeek.Net.Api.Controllers
         [SwaggerResponse(400)]
         public async Task<IActionResult> Get([FromRoute]SchoolZone zone, [FromRoute] string value)
         {
+            if (zone == SchoolZone.Unknown)
+                return BadRequest("Invalid Zone, must be A, B or C");
+
             DateTimeOffset? date = GetDateFromInput(value);
 
             if (date.HasValue)
-                return Ok(await _schoolHolidayHelper.GetSchoolHoliday(date.Value, zone));
+                return Ok(new SchoolHolidayResponse(date.Value, await _schoolHolidayHelper.GetSchoolHoliday(date.Value, zone)));
 
-            return BadRequest();
+            return BadRequest("Invalid date, accepted values: now|tomorrow|yesterday|date(YYYY-MM-DD)");
         }
     }
 }

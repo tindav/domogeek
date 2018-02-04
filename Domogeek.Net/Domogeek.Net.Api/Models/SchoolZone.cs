@@ -1,7 +1,8 @@
-﻿namespace Domogeek.Net.Api.Controllers
+﻿namespace Domogeek.Net.Api.Models
 {
     public enum SchoolZone
     {
+        Unknown,
         A,
         B,
         C

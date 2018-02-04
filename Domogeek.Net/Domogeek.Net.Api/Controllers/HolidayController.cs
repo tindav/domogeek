@@ -17,12 +17,15 @@ namespace Domogeek.Net.Api.Controllers
             if (!country.HasValue)
                 country = CountryEnum.fr;
 
+            if (country == CountryEnum.unknown)
+                return BadRequest("Invalid Country");
+
             DateTimeOffset? date = GetDateFromInput(value);
 
             if (date.HasValue)
                 return Ok(new HolidayResponse(date.Value, HolidayHelper.GetHoliday(date.Value, country.Value)));
 
-            return BadRequest();
+            return BadRequest("Invalid date, accepted values: now|tomorrow|yesterday|date(YYYY-MM-DD)");
         }
     }
 }
