@@ -21,9 +21,14 @@ namespace Domogeek.Net.Api.Controllers
         [SwaggerResponse(400)]
         public async Task<IActionResult> Get([FromRoute] string location)
         {
-            if(!string.IsNullOrWhiteSpace(location))
-                return Ok((GeoCoordinatesResponse) await _geolocationHelper.GetLocationAsync(location));
+            if (!string.IsNullOrWhiteSpace(location))
+            {
+                var response = await _geolocationHelper.GetLocationAsync(location);
+                if (response != null)
+                    return Ok((GeoCoordinatesResponse)response);
 
+                return BadRequest($"Location {location} not found");
+            }
             return BadRequest("location must be provided");
         }
     }

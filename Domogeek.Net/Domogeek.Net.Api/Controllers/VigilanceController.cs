@@ -35,7 +35,10 @@ namespace Domogeek.Net.Api.Controllers
             if (departement == "20")
                 departement = "2A";
 
-            return Ok(new VigilanceResponse(await _vigilanceHelper.GetVigilanceAsync(departement, vigilanceType), vigilanceType));
+            var response = await _vigilanceHelper.GetVigilanceAsync(departement, vigilanceType);
+            if (response != null)
+                return Ok(new VigilanceResponse(response, vigilanceType));
+            return BadRequest($"Department {departement} not found");
         }
     }
 }

@@ -48,8 +48,12 @@ namespace Domogeek.Net.Api.Helpers
             var bingPosition = await GetCoordinatesFromBingAsync(location);
             if (bingPosition?.StatusCode == 200)
             {
-                var result = (GeoCoordinates)bingPosition.ResourceSets.First().Resources.First().Point.Coordinates;
-                return Cache.Set(CacheKey(location), result, TimeSpan.FromDays(1));
+                var bingResult = bingPosition.ResourceSets?.FirstOrDefault()?.Resources?.FirstOrDefault();
+                if (bingResult != null)
+                {
+                    var result = (GeoCoordinates)bingResult.Point.Coordinates;
+                    return Cache.Set(CacheKey(location), result, TimeSpan.FromDays(1));
+                }
             }
             return null;
         }
