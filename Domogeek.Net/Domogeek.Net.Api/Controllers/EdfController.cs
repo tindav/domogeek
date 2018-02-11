@@ -7,13 +7,29 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Domogeek.Net.Api.Controllers
 {
-    public class TempoEdfController : BaseController
+    public class EdfController : BaseController
     {
         private readonly EdfHelper _edfHelper;
 
-        public TempoEdfController(EdfHelper edfHelper)
+        public EdfController(EdfHelper edfHelper)
         {
             _edfHelper = edfHelper;
+        }
+
+        [HttpGet("~/api/ejpedf/{zone}/{value}")]
+        [SwaggerResponse(200, typeof(EdfEjpResponse))]
+        [SwaggerResponse(400)]
+        public async Task<IActionResult> Get([FromRoute] EjpEdfZoneEnum zone, [FromRoute] string value)
+        {
+            if (zone == EjpEdfZoneEnum.Unknown)
+                return BadRequest("Invalid Zone, must be nord, sud, ouest or paca");
+
+            DateTimeOffset? date = GetDateFromInput(value);
+
+            if (date.HasValue)
+                return Ok(new EdfEjpResponse(date.Value, await _edfHelper.GetEjpAsync(date.Value, zone)));
+
+            return BadRequest("Invalid date, accepted values: now|tomorrow|yesterday|date(YYYY-MM-DD)");
         }
 
         [HttpGet("~/api/tempoedf/{value}")]
