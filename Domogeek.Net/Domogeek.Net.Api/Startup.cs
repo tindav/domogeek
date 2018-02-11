@@ -42,6 +42,7 @@ namespace Domogeek.Net.Api
             services.AddSingleton<SchoolHolidayHelper>();
             services.AddSingleton<VigilanceHelper>();
             services.AddSingleton<GeolocationHelper>();
+            services.AddSingleton<SaintHelper>();
 
             services.AddSwaggerGen(c =>
             {
