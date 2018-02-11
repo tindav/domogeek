@@ -23,6 +23,8 @@ namespace Domogeek.Net.Api.Helpers
 
         private string CacheKey(string searchedLocation) => $"{CachePrefix}-{searchedLocation.ToLowerInvariant()}";
 
+        private string CacheKey(GeoCoordinates coordinates, DateTimeOffset date) => $"{CachePrefix}-{coordinates.Latitude},{coordinates.Longitude}-{date.Date.ToString("o")}";
+
         public GeolocationHelper(IMemoryCache cache, IConfiguration configuration)
         {
             Cache = cache;
@@ -31,6 +33,7 @@ namespace Domogeek.Net.Api.Helpers
         }
 
         const string googleUrl = "https://maps.googleapis.com/maps/api/geocode/json?address={0}&key={1}";
+        const string googleTzUrl = "https://maps.googleapis.com/maps/api/timezone/json?location={0},{1}&timestamp={2}&key={3}";
         const string bingUrl = "http://dev.virtualearth.net/REST/v1/Locations/{0}?maxResults=1&key={1}";
 
         public async Task<GeoCoordinates> GetLocationAsync(string location)
@@ -58,6 +61,23 @@ namespace Domogeek.Net.Api.Helpers
             return null;
         }
 
+        public async Task<double> GetUtcOffsetAsync(GeoCoordinates coordinates, DateTimeOffset date)
+        {
+            date = new DateTimeOffset(new DateTime(date.Year, date.Month, date.Day), TimeSpan.FromHours(0));
+
+            if (Cache.TryGetValue(CacheKey(coordinates, date), out double offset))
+                return offset;
+
+            var googleTimeZoneInfo = await GetTimeZoneFromGoogleAsync(coordinates, date.Date);
+            if (googleTimeZoneInfo.Status == "OK")
+            {
+                var result = (googleTimeZoneInfo.RawOffset + googleTimeZoneInfo.DstOffset) / 3600.0;
+                return Cache.Set(CacheKey(coordinates, date), result, TimeSpan.FromDays(1));
+            }
+
+            return 0.0;
+        }
+
         private async Task<GoogleGeocodeResult> GetCoordinatesFromGoogleAsync(string location)
         {
             using (var client = new HttpClient())
@@ -65,6 +85,23 @@ namespace Domogeek.Net.Api.Helpers
                 var result = await client.GetStringAsync(string.Format(googleUrl, location, GoogleApiKey));
                 return JsonConvert.DeserializeObject<GoogleGeocodeResult>(result);
             }
+        }
+
+        private async Task<GoogleTimeZoneResult> GetTimeZoneFromGoogleAsync(GeoCoordinates coordinates, DateTime date)
+        {
+            using (var client = new HttpClient())
+            {
+                var result = await client.GetAsync(string.Format(googleTzUrl,
+                                                                 coordinates.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                                                                 coordinates.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                                                                 date.ToTimestamp(),
+                                                                 GoogleApiKey));
+                if (result.IsSuccessStatusCode)
+                    return JsonConvert.DeserializeObject<GoogleTimeZoneResult>(await result.Content.ReadAsStringAsync());
+                else
+                    return null;
+            }
+
         }
 
         private async Task<BingGeocodeResult> GetCoordinatesFromBingAsync(string location)
@@ -79,4 +116,16 @@ namespace Domogeek.Net.Api.Helpers
             }
         }
     }
+
+    public static class DateTimeExtension
+    {
+        private static readonly long DatetimeMinTimeTicks =
+           (new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).Ticks;
+
+        public static long ToTimestamp(this DateTime dt)
+        {
+            return (long)((dt.ToUniversalTime().Ticks - DatetimeMinTimeTicks) / 10000000);
+        }
+    }
+
 }

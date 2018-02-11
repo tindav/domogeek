@@ -10,14 +10,14 @@ namespace Domogeek.Net.Api.Models
     {
         private readonly DawnDuskType _dawnDuskType;
 
-        public DawnDusk(DateTimeOffset date, GeoCoordinates coordinates, DawnDuskType dawnDuskType)
+        public DawnDusk(DateTimeOffset date, GeoCoordinates coordinates, DawnDuskType dawnDuskType, double utcOffset)
         {
             Date = date.Date;
             var mLon = (coordinates.Longitude * 4.0) / 60.0;
             var solarDeclination = GetDeclination(GetDay(date));
             var Ho = GetHo(solarDeclination, coordinates.Latitude, coordinates.Longitude);
             var equationOfTime = GetEoT(GetDay(date));
-            Meridian = 12.0 + equationOfTime - mLon + date.Offset.TotalHours;
+            Meridian = 12.0 + equationOfTime - mLon + utcOffset;
             Sunrise = Meridian - Ho;
             Sunset = Meridian + Ho;
             Duration = Ho * 2;

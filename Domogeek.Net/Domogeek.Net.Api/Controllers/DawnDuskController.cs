@@ -27,15 +27,18 @@ namespace Domogeek.Net.Api.Controllers
             if (string.IsNullOrWhiteSpace(location))
                 return BadRequest("Location must be provided");
 
-            var coordinates = await _geolocationHelper.GetLocationAsync(location);
-            if (coordinates == null)
-                return BadRequest($"Location {location} not found");
-
             DateTimeOffset? date = GetDateFromInput(dateInput);
 
             if (date.HasValue)
-                return Ok(new DawnDusk(date.Value, coordinates, dawnduskType));
+            {
+                var coordinates = await _geolocationHelper.GetLocationAsync(location);
+                if (coordinates == null)
+                    return BadRequest($"Location {location} not found");
 
+                var utcOffset = await _geolocationHelper.GetUtcOffsetAsync(coordinates, date.Value);
+
+                return Ok(new DawnDusk(date.Value, coordinates, dawnduskType, utcOffset));
+            }
             return BadRequest("Invalid date, accepted values: now|tomorrow|yesterday|date(YYYY-MM-DD)");
         }
     }

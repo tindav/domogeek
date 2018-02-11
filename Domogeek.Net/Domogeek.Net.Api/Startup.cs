@@ -31,6 +31,12 @@ namespace Domogeek.Net.Api
                 s.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder.WithOrigins("http://domogeek.azurewebsites.net"));
+            });
+
             services.AddMemoryCache();
             services.AddSingleton<EdfHelper>();
             services.AddSingleton<SchoolHolidayHelper>();
@@ -55,6 +61,8 @@ namespace Domogeek.Net.Api
             }
 
             app.UseMvc();
+
+            app.UseCors("AllowSpecificOrigin");
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
