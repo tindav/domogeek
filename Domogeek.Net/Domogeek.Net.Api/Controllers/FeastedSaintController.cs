@@ -3,6 +3,7 @@ using System.Net;
 using Domogeek.Net.Api.Helpers;
 using Domogeek.Net.Api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Domogeek.Net.Api.Controllers
@@ -17,8 +18,8 @@ namespace Domogeek.Net.Api.Controllers
         }
 
         [HttpGet("~/api/feastedsaint/{value}")]
-        [SwaggerResponse(200, typeof(Saint))]
-        [SwaggerResponse(200, typeof(Saint[]))]
+        [SwaggerResponse(200, Type = typeof(Saint))]
+        [SwaggerResponse(200, Type = typeof(Saint[]))]
         [SwaggerResponse(400)]
         public IActionResult Get([FromRoute] string value)
         {

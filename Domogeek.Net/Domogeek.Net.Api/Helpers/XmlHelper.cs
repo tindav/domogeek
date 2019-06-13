@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
@@ -26,6 +27,7 @@ namespace Domogeek.Net.Api.Helpers
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex.ToString());
                 throw;
             }
         }
@@ -41,6 +43,7 @@ namespace Domogeek.Net.Api.Helpers
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex.ToString());
                 throw;
             }
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Domogeek.Net.Api.Helpers;
 using Domogeek.Net.Api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Domogeek.Net.Api.Controllers
@@ -10,7 +11,7 @@ namespace Domogeek.Net.Api.Controllers
     public class HolidayController : BaseController
     {
         [HttpGet("~/api/holiday/{value}")]
-        [SwaggerResponse(200, typeof(HolidayResponse))]
+        [SwaggerResponse(200, Type = typeof(HolidayResponse))]
         [SwaggerResponse(400)]
         public IActionResult Get([FromRoute] string value, CountryEnum? country)
         {

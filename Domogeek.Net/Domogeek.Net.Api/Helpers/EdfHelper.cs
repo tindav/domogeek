@@ -3,6 +3,8 @@ using Domogeek.Net.Api.Models.External;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -12,6 +14,7 @@ namespace Domogeek.Net.Api.Helpers
     {
 
         private IMemoryCache Cache { get; }
+        public IHttpClientFactory HttpClientFactory { get; }
 
         private const string TempoCachePrefix = "EdfTempo";
         private const string EjpCachePrefix = "EdfEjp";
@@ -19,9 +22,10 @@ namespace Domogeek.Net.Api.Helpers
         private string TempoCacheKey(DateTimeOffset date) => $"{TempoCachePrefix}-{date.Date}";
         private string EjpCacheKey(DateTimeOffset date) => $"{EjpCachePrefix}-{date.Date}";
 
-        public EdfHelper(IMemoryCache cache)
+        public EdfHelper(IMemoryCache cache, IHttpClientFactory httpClientFactory)
         {
             Cache = cache;
+            HttpClientFactory = httpClientFactory;
         }
 
         const string ejpUrl = "https://particulier.edf.fr/bin/edf_rc/servlets/ejptemponew?Date_a_remonter={0}&TypeAlerte=EJP";
@@ -52,20 +56,16 @@ namespace Domogeek.Net.Api.Helpers
 
         private async Task<EdfTempo> GetTempoFromEdfAsync(DateTimeOffset date)
         {
-            using (var client = new HttpClient())
-            {
-                var result = await client.GetStringAsync(string.Format(tempoUrl, date.ToString("yyyy-MM-dd")));
-                return JsonConvert.DeserializeObject<EdfTempo>(result);
-            }
+            var client = HttpClientFactory.CreateClient();
+            var result = await client.GetStringWithAcceptAndKeepAliveAsync(string.Format(tempoUrl, date.ToString("yyyy-MM-dd")));
+            return JsonConvert.DeserializeObject<EdfTempo>(result);
         }
 
         private async Task<EdfEjp> GetEjpFromEdfAsync(DateTimeOffset date)
         {
-            using (var client = new HttpClient())
-            {
-                var result = await client.GetStringAsync(string.Format(ejpUrl, date.ToString("yyyy-MM-dd")));
-                return JsonConvert.DeserializeObject<EdfEjp>(result);
-            }
+            var client = HttpClientFactory.CreateClient();
+            var result = await client.GetStringWithAcceptAndKeepAliveAsync(string.Format(ejpUrl, date.ToString("yyyy-MM-dd")));
+            return JsonConvert.DeserializeObject<EdfEjp>(result);
         }
     }
 }

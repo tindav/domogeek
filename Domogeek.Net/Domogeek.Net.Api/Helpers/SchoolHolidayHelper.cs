@@ -14,10 +14,12 @@ namespace Domogeek.Net.Api.Helpers
     {
 
         private IMemoryCache Cache { get; }
+        public IHttpClientFactory HttpClientFactory { get; }
 
-        public SchoolHolidayHelper(IMemoryCache cache)
+        public SchoolHolidayHelper(IMemoryCache cache, IHttpClientFactory httpClientFactory)
         {
             Cache = cache;
+            HttpClientFactory = httpClientFactory;
         }
 
         private const string CacheKey = "SchoolHoliday";
@@ -38,11 +40,9 @@ namespace Domogeek.Net.Api.Helpers
 
         private async Task<SchoolHolidayData[]> GetSchoolHolidayFromOpenData()
         {
-            using (var client = new HttpClient())
-            {
-                var result = await client.GetStringAsync(schoolHolidayUrl);
-                return JsonConvert.DeserializeObject<SchoolHolidayData[]>(result);
-            }
+            var client = HttpClientFactory.CreateClient();
+            var result = await client.GetStringAsync(schoolHolidayUrl);
+            return JsonConvert.DeserializeObject<SchoolHolidayData[]>(result);
         }
     }
 }

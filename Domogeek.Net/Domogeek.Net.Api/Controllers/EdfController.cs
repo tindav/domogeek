@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Domogeek.Net.Api.Helpers;
 using Domogeek.Net.Api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Domogeek.Net.Api.Controllers
@@ -17,7 +18,7 @@ namespace Domogeek.Net.Api.Controllers
         }
 
         [HttpGet("~/api/ejpedf/{zone}/{value}")]
-        [SwaggerResponse(200, typeof(EdfEjpResponse))]
+        [SwaggerResponse(200, Type = typeof(EdfEjpResponse))]
         [SwaggerResponse(400)]
         public async Task<IActionResult> Get([FromRoute] EjpEdfZoneEnum zone, [FromRoute] string value)
         {
@@ -33,7 +34,7 @@ namespace Domogeek.Net.Api.Controllers
         }
 
         [HttpGet("~/api/tempoedf/{value}")]
-        [SwaggerResponse(200, typeof(EdfTempoResponse))]
+        [SwaggerResponse(200, Type = typeof(EdfTempoResponse))]
         [SwaggerResponse(400)]
         public async Task<IActionResult> Get([FromRoute] string value)
         {

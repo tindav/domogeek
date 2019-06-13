@@ -43,6 +43,7 @@ namespace Domogeek.Net.Api
             services.AddSingleton<VigilanceHelper>();
             services.AddSingleton<GeolocationHelper>();
             services.AddSingleton<SaintHelper>();
+            services.AddHttpClient();
 
             services.AddSwaggerGen(c =>
             {
@@ -62,7 +63,6 @@ namespace Domogeek.Net.Api
             }
 
             app.UseMvc();
-
             app.UseCors("AllowSpecificOrigin");
 
             app.UseDefaultFiles();

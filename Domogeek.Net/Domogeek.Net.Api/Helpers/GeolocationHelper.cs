@@ -15,6 +15,7 @@ namespace Domogeek.Net.Api.Helpers
     {
 
         private IMemoryCache Cache { get; }
+        public IHttpClientFactory HttpClientFactory { get; }
 
         private const string CachePrefix = "GeolocationHelper";
 
@@ -25,9 +26,10 @@ namespace Domogeek.Net.Api.Helpers
 
         private string CacheKey(GeoCoordinates coordinates, DateTimeOffset date) => $"{CachePrefix}-{coordinates.Latitude},{coordinates.Longitude}-{date.Date.ToString("o")}";
 
-        public GeolocationHelper(IMemoryCache cache, IConfiguration configuration)
+        public GeolocationHelper(IMemoryCache cache, IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             Cache = cache;
+            HttpClientFactory = httpClientFactory;
             GoogleApiKey = configuration["Geolocation:GoogleApiKey"];
             BingApiKey = configuration["Geolocation:BingApiKey"];
         }
@@ -80,18 +82,15 @@ namespace Domogeek.Net.Api.Helpers
 
         private async Task<GoogleGeocodeResult> GetCoordinatesFromGoogleAsync(string location)
         {
-            using (var client = new HttpClient())
-            {
-                var result = await client.GetStringAsync(string.Format(googleUrl, location, GoogleApiKey));
+            var client = HttpClientFactory.CreateClient();
+            var result = await client.GetStringAsync(string.Format(googleUrl, location, GoogleApiKey));
                 return JsonConvert.DeserializeObject<GoogleGeocodeResult>(result);
-            }
         }
 
         private async Task<GoogleTimeZoneResult> GetTimeZoneFromGoogleAsync(GeoCoordinates coordinates, DateTime date)
         {
-            using (var client = new HttpClient())
-            {
-                var result = await client.GetAsync(string.Format(googleTzUrl,
+            var client = HttpClientFactory.CreateClient();
+            var result = await client.GetAsync(string.Format(googleTzUrl,
                                                                  coordinates.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture),
                                                                  coordinates.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture),
                                                                  date.ToTimestamp(),
@@ -100,20 +99,17 @@ namespace Domogeek.Net.Api.Helpers
                     return JsonConvert.DeserializeObject<GoogleTimeZoneResult>(await result.Content.ReadAsStringAsync());
                 else
                     return null;
-            }
 
         }
 
         private async Task<BingGeocodeResult> GetCoordinatesFromBingAsync(string location)
         {
-            using (var client = new HttpClient())
-            {
-                var result = await client.GetAsync(string.Format(bingUrl, location, BingApiKey));
+            var client = HttpClientFactory.CreateClient();
+            var result = await client.GetAsync(string.Format(bingUrl, location, BingApiKey));
                 if (result.IsSuccessStatusCode)
                     return JsonConvert.DeserializeObject<BingGeocodeResult>(await result.Content.ReadAsStringAsync());
                 else
                     return null;
-            }
         }
     }
 
