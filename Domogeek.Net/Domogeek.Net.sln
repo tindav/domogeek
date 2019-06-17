@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domogeek.Net.Api", "Domogeek.Net.Api\Domogeek.Net.Api.csproj", "{2577EFD8-19CA-48B4-A644-DCA1C11D164F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHttpClient", "TestHttpClient\TestHttpClient.csproj", "{41872A35-B153-461C-BE1E-BAFC778EC2D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestHttpClient", "TestHttpClient\TestHttpClient.csproj", "{41872A35-B153-461C-BE1E-BAFC778EC2D4}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{568FBE00-0B79-44EB-BF3F-0D13907F1116}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{41872A35-B153-461C-BE1E-BAFC778EC2D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41872A35-B153-461C-BE1E-BAFC778EC2D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41872A35-B153-461C-BE1E-BAFC778EC2D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{568FBE00-0B79-44EB-BF3F-0D13907F1116}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{568FBE00-0B79-44EB-BF3F-0D13907F1116}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{568FBE00-0B79-44EB-BF3F-0D13907F1116}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{568FBE00-0B79-44EB-BF3F-0D13907F1116}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

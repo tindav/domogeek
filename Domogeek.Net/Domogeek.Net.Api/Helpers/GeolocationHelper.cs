@@ -1,13 +1,11 @@
-﻿using Domogeek.Net.Api.Models;
+﻿using System;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Domogeek.Net.Api.Models.External;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Domogeek.Net.Api.Helpers
 {
@@ -84,7 +82,7 @@ namespace Domogeek.Net.Api.Helpers
         {
             var client = HttpClientFactory.CreateClient();
             var result = await client.GetStringAsync(string.Format(googleUrl, location, GoogleApiKey));
-                return JsonConvert.DeserializeObject<GoogleGeocodeResult>(result);
+            return JsonConvert.DeserializeObject<GoogleGeocodeResult>(result);
         }
 
         private async Task<GoogleTimeZoneResult> GetTimeZoneFromGoogleAsync(GeoCoordinates coordinates, DateTime date)
@@ -95,10 +93,10 @@ namespace Domogeek.Net.Api.Helpers
                                                                  coordinates.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture),
                                                                  date.ToTimestamp(),
                                                                  GoogleApiKey));
-                if (result.IsSuccessStatusCode)
-                    return JsonConvert.DeserializeObject<GoogleTimeZoneResult>(await result.Content.ReadAsStringAsync());
-                else
-                    return null;
+            if (result.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<GoogleTimeZoneResult>(await result.Content.ReadAsStringAsync());
+            else
+                return null;
 
         }
 
@@ -106,10 +104,10 @@ namespace Domogeek.Net.Api.Helpers
         {
             var client = HttpClientFactory.CreateClient();
             var result = await client.GetAsync(string.Format(bingUrl, location, BingApiKey));
-                if (result.IsSuccessStatusCode)
-                    return JsonConvert.DeserializeObject<BingGeocodeResult>(await result.Content.ReadAsStringAsync());
-                else
-                    return null;
+            if (result.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<BingGeocodeResult>(await result.Content.ReadAsStringAsync());
+            else
+                return null;
         }
     }
 

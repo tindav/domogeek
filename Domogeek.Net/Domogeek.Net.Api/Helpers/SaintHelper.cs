@@ -1,9 +1,9 @@
-﻿using Domogeek.Net.Api.Models;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Domogeek.Net.Api.Models;
+using Newtonsoft.Json;
 
 namespace Domogeek.Net.Api.Helpers
 {

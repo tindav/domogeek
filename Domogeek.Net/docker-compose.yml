@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  domogeek.net.api:
+    image: ${DOCKER_REGISTRY-}domogeeknetapi
+    ports:
+      - "8080:80"
+    build:
+      context: ./Domogeek.Net.Api
+      dockerfile: Dockerfile

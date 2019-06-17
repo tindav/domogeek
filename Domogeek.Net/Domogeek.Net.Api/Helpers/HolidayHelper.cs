@@ -1,8 +1,7 @@
-﻿using Domogeek.Net.Api.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Domogeek.Net.Api.Models;
 
 namespace Domogeek.Net.Api.Helpers
 {

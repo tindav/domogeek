@@ -1,12 +1,10 @@
-﻿using Domogeek.Net.Api.Models;
+﻿using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Domogeek.Net.Api.Models;
 using Domogeek.Net.Api.Models.External;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
-using System;
-using System.Diagnostics;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Domogeek.Net.Api.Helpers
 {
