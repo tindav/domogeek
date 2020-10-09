@@ -2,8 +2,6 @@
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -34,8 +32,7 @@ namespace Domogeek.Net.Api.Helpers
             }
 
             var tempo = await GetTempoFromEdfAsync(date);
-            Cache.Set(CacheKey(date), tempo.JourJ.Tempo, TimeSpan.FromDays(1));
-            return tempo.JourJ.Tempo;
+            return Cache.Set(CacheKey(date), tempo.JourJ.Tempo, TimeSpan.FromDays(1));
         }
 
         private async Task<EdfTempo> GetTempoFromEdfAsync(DateTimeOffset date)

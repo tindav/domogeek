@@ -30,6 +30,18 @@ namespace Domogeek.Net.Api.Models.External
 
     public class GeoCoordinates
     {
+        public static implicit operator GeoCoordinates(double[] gc)
+        {
+            if (gc == null || gc.Length != 2)
+                return null;
+
+            return new GeoCoordinates
+            {
+                Latitude = gc[0],
+                Longitude = gc[1]
+            };
+        }
+
         [JsonProperty("lat")]
         public double Latitude { get; set; }
         [JsonProperty("lng")]

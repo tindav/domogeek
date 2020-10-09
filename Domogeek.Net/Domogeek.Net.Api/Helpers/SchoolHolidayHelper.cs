@@ -28,30 +28,12 @@ namespace Domogeek.Net.Api.Helpers
         {
             if (Cache.TryGetValue(CacheKey, out SchoolHolidayData[] schoolHolidayData))
             {
-                return schoolHolidayData.FirstOrDefault(h => IsDateInRange(date, h) && IsForZone(zone, h))?.Holidays;
+                return schoolHolidayData.Holiday(date, zone);
             }
 
             var schoolHolidays = await GetSchoolHolidayFromOpenData();
             Cache.Set(CacheKey, schoolHolidays, TimeSpan.FromDays(1));
-            return schoolHolidays.FirstOrDefault(h => IsDateInRange(date, h))?.Holidays;
-        }
-
-        private bool IsForZone(SchoolZone zone, SchoolHolidayData h)
-        {
-            if (h.Holidays.ZoneList.Any())
-                return h.Holidays.ZoneList.Any(z => z.Equals(zone.ToString(), StringComparison.OrdinalIgnoreCase));
-
-            return true;
-        }
-
-        private static bool IsDateInRange(DateTimeOffset date, SchoolHolidayData h)
-        {
-            if (h.Holidays.EndDate.HasValue)
-            {
-                return date.Date >= h.Holidays.StartDate.Value.Date && date.Date <= h.Holidays.EndDate.Value.Date;
-            }
-            else
-                return date.Date == h.Holidays.StartDate.Value.Date;
+            return schoolHolidays.Holiday(date, zone);
         }
 
         private async Task<SchoolHolidayData[]> GetSchoolHolidayFromOpenData()
