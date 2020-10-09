@@ -1,0 +1,32 @@
+﻿using System;
+using Domogeek.Net.Api.Helpers;
+using Domogeek.Net.Api.Models;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+
+namespace Domogeek.Net.Api.Controllers
+{
+    public class FeastedSaintController : BaseController
+    {
+        private readonly SaintHelper _saintHelper;
+
+        public FeastedSaintController(SaintHelper saintHelper)
+        {
+            _saintHelper = saintHelper;
+        }
+
+        [HttpGet("~/api/feastedsaint/{value}")]
+        [SwaggerResponse(200, Type = typeof(Saint))]
+        [SwaggerResponse(200, Type = typeof(Saint[]))]
+        [SwaggerResponse(400)]
+        public IActionResult Get([FromRoute] string value)
+        {
+            DateTimeOffset? date = GetDateFromInput(value);
+
+            if (date.HasValue)
+                return Ok(_saintHelper.GetForDate(date.Value.Day, date.Value.Month));
+
+            return Ok(_saintHelper.GetForName(value));
+        }
+    }
+}

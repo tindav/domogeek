@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Domogeek.Net.Api.Helpers;
 using Domogeek.Net.Api.Models;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Domogeek.Net.Api.Controllers
 {
@@ -17,7 +17,7 @@ namespace Domogeek.Net.Api.Controllers
         }
 
         [HttpGet("~/api/schoolholiday/{zone}/{value}")]
-        //[SwaggerResponse(200, typeof(SchoolHoliday))]
+        [SwaggerResponse(200, Type = typeof(SchoolHolidayResponse))]
         [SwaggerResponse(400)]
         public async Task<IActionResult> Get([FromRoute]SchoolZone zone, [FromRoute] string value)
         {

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Domogeek.Net.Api.Helpers;
 using Domogeek.Net.Api.Models;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace Domogeek.Net.Api.Controllers
 {
@@ -17,7 +16,7 @@ namespace Domogeek.Net.Api.Controllers
         }
 
         [HttpGet("~/api/vigilance/{departement}/{vigilanceType}")]
-        [SwaggerResponse(200, typeof(EdfTempoResponse))]
+        [SwaggerResponse(200, Type = typeof(EdfTempoResponse))]
         [SwaggerResponse(400)]
         public async Task<IActionResult> Get([FromRoute] string departement, [FromRoute] VigilanceType vigilanceType)
         {
@@ -35,7 +34,10 @@ namespace Domogeek.Net.Api.Controllers
             if (departement == "20")
                 departement = "2A";
 
-            return Ok(new VigilanceResponse(await _vigilanceHelper.GetVigilanceAsync(departement, vigilanceType), vigilanceType));
+            var response = await _vigilanceHelper.GetVigilanceAsync(departement, vigilanceType);
+            if (response != null)
+                return Ok(new VigilanceResponse(response, vigilanceType));
+            return BadRequest($"Department {departement} not found");
         }
     }
 }

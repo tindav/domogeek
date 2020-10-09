@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Domogeek.Net.Api.Helpers;
+﻿using Domogeek.Net.Api.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Domogeek.Net.Api
@@ -31,10 +24,19 @@ namespace Domogeek.Net.Api
                 s.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             });
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder.WithOrigins("http://domogeek.azurewebsites.net"));
+            });
+
             services.AddMemoryCache();
             services.AddSingleton<EdfHelper>();
             services.AddSingleton<SchoolHolidayHelper>();
             services.AddSingleton<VigilanceHelper>();
+            services.AddSingleton<GeolocationHelper>();
+            services.AddSingleton<SaintHelper>();
+            services.AddHttpClient();
 
             services.AddSwaggerGen(c =>
             {
@@ -54,6 +56,7 @@ namespace Domogeek.Net.Api
             }
 
             app.UseMvc();
+            app.UseCors("AllowSpecificOrigin");
 
             app.UseDefaultFiles();
             app.UseStaticFiles();

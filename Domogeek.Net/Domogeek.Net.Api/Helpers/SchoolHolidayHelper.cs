@@ -1,12 +1,10 @@
-﻿using Domogeek.Net.Api.Models;
+﻿using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Domogeek.Net.Api.Models;
 using Domogeek.Net.Api.Models.External;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Domogeek.Net.Api.Helpers
 {
@@ -14,10 +12,12 @@ namespace Domogeek.Net.Api.Helpers
     {
 
         private IMemoryCache Cache { get; }
+        public IHttpClientFactory HttpClientFactory { get; }
 
-        public SchoolHolidayHelper(IMemoryCache cache)
+        public SchoolHolidayHelper(IMemoryCache cache, IHttpClientFactory httpClientFactory)
         {
             Cache = cache;
+            HttpClientFactory = httpClientFactory;
         }
 
         private const string CacheKey = "SchoolHoliday";
@@ -28,39 +28,19 @@ namespace Domogeek.Net.Api.Helpers
         {
             if (Cache.TryGetValue(CacheKey, out SchoolHolidayData[] schoolHolidayData))
             {
-                return schoolHolidayData.FirstOrDefault(h => IsDateInRange(date, h) && IsForZone(zone, h))?.Holidays;
+                return schoolHolidayData.Holiday(date, zone);
             }
 
             var schoolHolidays = await GetSchoolHolidayFromOpenData();
             Cache.Set(CacheKey, schoolHolidays, TimeSpan.FromDays(1));
-            return schoolHolidays.FirstOrDefault(h => IsDateInRange(date, h))?.Holidays;
-        }
-
-        private bool IsForZone(SchoolZone zone, SchoolHolidayData h)
-        {
-            if (h.Holidays.ZoneList.Any())
-                return h.Holidays.ZoneList.Any(z => z.Equals(zone.ToString(), StringComparison.OrdinalIgnoreCase));
-
-            return true;
-        }
-
-        private static bool IsDateInRange(DateTimeOffset date, SchoolHolidayData h)
-        {
-            if (h.Holidays.EndDate.HasValue)
-            {
-                return date.Date >= h.Holidays.StartDate.Value.Date && date.Date <= h.Holidays.EndDate.Value.Date;
-            }
-            else
-                return date.Date == h.Holidays.StartDate.Value.Date;
+            return schoolHolidays.Holiday(date, zone);
         }
 
         private async Task<SchoolHolidayData[]> GetSchoolHolidayFromOpenData()
         {
-            using (var client = new HttpClient())
-            {
-                var result = await client.GetStringAsync(schoolHolidayUrl);
-                return JsonConvert.DeserializeObject<SchoolHolidayData[]>(result);
-            }
+            var client = HttpClientFactory.CreateClient();
+            var result = await client.GetStringAsync(schoolHolidayUrl);
+            return JsonConvert.DeserializeObject<SchoolHolidayData[]>(result);
         }
     }
 }

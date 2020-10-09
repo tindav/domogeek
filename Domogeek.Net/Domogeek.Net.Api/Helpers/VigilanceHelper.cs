@@ -1,12 +1,10 @@
-﻿using Domogeek.Net.Api.Models;
-using Domogeek.Net.Api.Models.External;
-using Microsoft.Extensions.Caching.Memory;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Domogeek.Net.Api.Models;
+using Domogeek.Net.Api.Models.External;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Domogeek.Net.Api.Helpers
 {
@@ -14,12 +12,14 @@ namespace Domogeek.Net.Api.Helpers
     {
 
         private IMemoryCache Cache { get; }
+        public IHttpClientFactory HttpClientFactory { get; }
 
         private const string CacheKey = "Vigilance";
 
-        public VigilanceHelper(IMemoryCache cache)
+        public VigilanceHelper(IMemoryCache cache, IHttpClientFactory httpClientFactory)
         {
             Cache = cache;
+            HttpClientFactory = httpClientFactory;
         }
 
         const string vigilanceUrl = "http://vigilance.meteofrance.com/data/NXFR34_LFPW_.xml";
@@ -38,11 +38,9 @@ namespace Domogeek.Net.Api.Helpers
 
         private async Task<CarteVigilance> GetVigilanceFromMeteoFranceAsync()
         {
-            using (var client = new HttpClient())
-            {
-                var result = await client.GetStringAsync(vigilanceUrl);
-                return XmlHelper.XmlDeserialize<CarteVigilance>(result);
-            }
+            var client = HttpClientFactory.CreateClient();
+            var result = await client.GetStringAsync(vigilanceUrl);
+            return XmlHelper.XmlDeserialize<CarteVigilance>(result);
         }
     }
 }
