@@ -11,7 +11,9 @@ namespace Domogeek.Net.Api.Controllers
         [HttpGet("~/api/holiday/{value}")]
         [SwaggerResponse(200, Type = typeof(HolidayResponse))]
         [SwaggerResponse(400)]
-        public IActionResult Get([FromRoute] string value, CountryEnum? country)
+        public IActionResult Get(
+            [FromRoute] string value,
+            [FromRoute] CountryEnum? country)
         {
             if (!country.HasValue)
                 country = CountryEnum.fr;

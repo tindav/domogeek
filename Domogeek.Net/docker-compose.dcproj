@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>568fbe00-0b79-44eb-bf3f-0d13907f1116</ProjectGuid>
+    <ProjectGuid>8b78494b-33f1-4f68-9462-50734d40560c</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>domogeek.net.api</DockerServiceName>

@@ -19,7 +19,9 @@ namespace Domogeek.Net.Api.Controllers
         [HttpGet("~/api/schoolholiday/{zone}/{value}")]
         [SwaggerResponse(200, Type = typeof(SchoolHolidayResponse))]
         [SwaggerResponse(400)]
-        public async Task<IActionResult> Get([FromRoute]SchoolZone zone, [FromRoute] string value)
+        public async Task<IActionResult> Get(
+            [FromRoute]SchoolZone zone, 
+            [FromRoute] string value)
         {
             if (zone == SchoolZone.Unknown)
                 return BadRequest("Invalid Zone, must be A, B or C");

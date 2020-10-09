@@ -1,5 +1,4 @@
-﻿using Domogeek.Net.Api.Models;
-using System;
+﻿using System;
 
 namespace Domogeek.Net.Api.Models
 {

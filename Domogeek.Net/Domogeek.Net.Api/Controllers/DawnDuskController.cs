@@ -19,7 +19,10 @@ namespace Domogeek.Net.Api.Controllers
         [HttpGet("~/api/dawndusk/{location}/{dawnduskType}/{dateInput}")]
         [SwaggerResponse(200, Type = typeof(DawnDusk))]
         [SwaggerResponse(400)]
-        public async Task<IActionResult> Get([FromRoute] string location, DawnDuskType dawnduskType, string dateInput)
+        public async Task<IActionResult> Get(
+            [FromRoute] string location,
+            [FromRoute] DawnDuskType dawnduskType,
+            [FromRoute] string dateInput)
         {
             if (dawnduskType == DawnDuskType.Unknown)
                 return BadRequest("Invalid Dawn/Dusk request type, accepted values: sunrise|sunset|zenith|dayDuration|all");

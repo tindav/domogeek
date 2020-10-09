@@ -1,5 +1,9 @@
-﻿namespace Domogeek.Net.Api.Models
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace Domogeek.Net.Api.Models
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum VigilanceType
     {
         Unknown = 0,

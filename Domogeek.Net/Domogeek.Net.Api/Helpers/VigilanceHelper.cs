@@ -10,7 +10,6 @@ namespace Domogeek.Net.Api.Helpers
 {
     public class VigilanceHelper
     {
-
         private IMemoryCache Cache { get; }
         public IHttpClientFactory HttpClientFactory { get; }
 

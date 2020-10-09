@@ -18,7 +18,9 @@ namespace Domogeek.Net.Api.Controllers
         [HttpGet("~/api/vigilance/{departement}/{vigilanceType}")]
         [SwaggerResponse(200, Type = typeof(EdfTempoResponse))]
         [SwaggerResponse(400)]
-        public async Task<IActionResult> Get([FromRoute] string departement, [FromRoute] VigilanceType vigilanceType)
+        public async Task<IActionResult> Get(
+            [FromRoute] string departement, 
+            [FromRoute] VigilanceType vigilanceType)
         {
             if (vigilanceType == VigilanceType.Unknown)
                 return BadRequest("Invalid vigilance request. Accepted values: color|risk|flood|all");

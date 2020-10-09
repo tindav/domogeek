@@ -11,7 +11,6 @@ namespace Domogeek.Net.Api.Helpers
 {
     public class GeolocationHelper
     {
-
         private IMemoryCache Cache { get; }
         public IHttpClientFactory HttpClientFactory { get; }
 

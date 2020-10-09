@@ -7,7 +7,6 @@ namespace Domogeek.Net.Api.Helpers
 {
     public static class HolidayHelper
     {
-
         public static List<Holiday> Holidays(int year, CountryEnum country)
         {
 

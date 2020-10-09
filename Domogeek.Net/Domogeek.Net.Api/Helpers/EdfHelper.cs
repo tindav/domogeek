@@ -10,7 +10,6 @@ namespace Domogeek.Net.Api.Helpers
 {
     public class EdfHelper
     {
-
         private IMemoryCache Cache { get; }
         public IHttpClientFactory HttpClientFactory { get; }
 
