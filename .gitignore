@@ -250,3 +250,4 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+/Domogeek.Net/Domogeek.Net.Api/Properties/ServiceDependencies/domogeek - Web Deploy/profile.arm.json

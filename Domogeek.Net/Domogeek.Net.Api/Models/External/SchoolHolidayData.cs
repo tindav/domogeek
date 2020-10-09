@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace Domogeek.Net.Api.Models.External
 {
@@ -13,10 +13,7 @@ namespace Domogeek.Net.Api.Models.External
 
         private static bool IsForZone(SchoolZone zone, SchoolHolidayData h)
         {
-            if (h.Holidays.ZoneList.Any())
-                return h.Holidays.ZoneList.Any(z => z.Equals(zone.ToString(), StringComparison.OrdinalIgnoreCase));
-
-            return true;
+            return h.Holidays.Zones.Equals($"Zone {zone}", StringComparison.OrdinalIgnoreCase);
         }
 
         private static bool IsDateInRange(DateTimeOffset date, SchoolHolidayData h)
