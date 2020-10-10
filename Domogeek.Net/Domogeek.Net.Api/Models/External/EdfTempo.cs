@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Runtime.Serialization;
 
 namespace Domogeek.Net.Api.Models.External
 {
@@ -19,8 +16,11 @@ namespace Domogeek.Net.Api.Models.External
     public enum TempoEnum
     {
         nd,
+        [EnumMember(Value = "TEMPO_ROUGE")]
         rouge,
+        [EnumMember(Value = "TEMPO_BLEU")]
         bleu,
+        [EnumMember(Value = "TEMPO_BLANC")]
         blanc
     }
 }
