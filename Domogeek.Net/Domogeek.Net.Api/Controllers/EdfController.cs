@@ -20,7 +20,7 @@ namespace Domogeek.Net.Api.Controllers
         [SwaggerResponse(200, Type = typeof(EdfEjpResponse))]
         [SwaggerResponse(400)]
         public async Task<IActionResult> Get(
-            [FromRoute] EjpEdfZoneEnum zone, 
+            [FromRoute] EjpEdfZoneEnum zone,
             [FromRoute] string value)
         {
             if (zone == EjpEdfZoneEnum.Unknown)

@@ -1,8 +1,6 @@
-﻿using Domogeek.Net.Api.Models.External;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
+using Domogeek.Net.Api.Models.External;
 
 namespace Domogeek.Net.Api.Models
 {
